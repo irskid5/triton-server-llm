@@ -58,6 +58,8 @@ from schemas.openai import (
     ObjectType,
 )
 
+tokenizers = {"llama-3.1-8b-instruct": "meta-llama/Llama-3.1-8B-Instruct"}
+
 
 # TODO: Improve type hints
 @dataclass
@@ -257,7 +259,7 @@ class TritonLLMEngine(LLMEngine):
                 name=name,
                 backend=backend,
                 model=model,
-                tokenizer=self._get_tokenizer(model.metadata()["tokenizer"]),
+                tokenizer=self._get_tokenizer(tokenizers[name]),
                 create_time=self.create_time,
                 request_converter=self._determine_request_converter(backend),
             )
