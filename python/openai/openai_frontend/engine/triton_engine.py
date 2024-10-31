@@ -77,12 +77,9 @@ class TritonModelMetadata:
 
 
 class TritonLLMEngine(LLMEngine):
-    def __init__(
-        self, server: tritonserver.Server, tokenizer: str, backend: Optional[str] = None
-    ):
+    def __init__(self, server: tritonserver.Server, backend: Optional[str] = None):
         # Assume an already configured and started server
         self.server = server
-        self.tokenizer = self._get_tokenizer(tokenizer)
         # TODO: Reconsider name of "backend" vs. something like "request_format"
         self.backend = backend
 
@@ -259,7 +256,7 @@ class TritonLLMEngine(LLMEngine):
                 name=name,
                 backend=backend,
                 model=model,
-                tokenizer=self.tokenizer,
+                tokenizer=self._get_tokenizer(model.metadata()["tokenizer"]),
                 create_time=self.create_time,
                 request_converter=self._determine_request_converter(backend),
             )
