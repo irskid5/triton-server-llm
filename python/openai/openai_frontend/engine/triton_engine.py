@@ -251,6 +251,7 @@ class TritonLLMEngine(LLMEngine):
             if not backend and model.config()["platform"] == "ensemble":
                 backend = "ensemble"
             print(f"Found model: {name=}, {backend=}")
+            print(model.metadata())
 
             metadata = TritonModelMetadata(
                 name=name,
