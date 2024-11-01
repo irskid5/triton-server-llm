@@ -143,7 +143,7 @@ class TritonLLMEngine(LLMEngine):
 
         # Unload model
         # @todo: add timeout
-        self.server.unload(model_name, wait_for_unloaded=True)
+        self.server.unload(model_name, wait_until_unloaded=True)
 
         # Check if model is unloaded, update local model metadata list
         model = self.server.model(model_name)
