@@ -216,9 +216,13 @@ class TritonLLMEngine(LLMEngine):
     async def completion(
         self, request: CreateCompletionRequest
     ) -> CreateCompletionResponse | AsyncIterator[str]:
+        print("In chat completion")
+
         # Validate request and convert to Triton format
         metadata = self.model_metadata.get(request.model)
         self._validate_completion_request(request, metadata)
+
+        print(metadata)
 
         # Convert to Triton request format and perform inference
         responses = metadata.model.async_infer(
