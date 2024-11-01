@@ -57,6 +57,7 @@ from schemas.openai import (
     Model,
     ObjectType,
 )
+from transformers import AutoTokenizer
 
 # Names of tokenizers per supported model. Temp fix.
 tokenizers = {
@@ -85,24 +86,6 @@ class TritonModelMetadata:
     create_time: int
     # Conversion format between OpenAI and Triton requests
     request_converter: Callable
-
-
-# Function to construct a prompt manually
-def construct_prompt(conversation, add_generation_prompt: bool):
-    prompt = ""
-    assistant_role = next(
-        (msg["role"] for msg in conversation if msg["role"] != "user"), "assistant"
-    )
-
-    for msg in conversation:
-        role = "User" if msg["role"] == "user" else assistant_role.capitalize()
-        content = msg["content"]
-        prompt += f"{role}: {content}\n"
-
-    if add_generation_prompt:
-        prompt += f"{assistant_role.capitalize()}: "
-
-    return prompt
 
 
 class TritonLLMEngine(LLMEngine):
@@ -186,16 +169,16 @@ class TritonLLMEngine(LLMEngine):
         ]
         add_generation_prompt = True
 
-        prompt = (
-            metadata.tokenizer.apply_chat_template(
-                conversation=conversation,
-                tokenize=False,
-                add_generation_prompt=add_generation_prompt,
-            )
-            if metadata.tokenizer.chat_template
-            else construct_prompt(
-                conversation, add_generation_prompt=add_generation_prompt
-            )
+        # Use the model's tokenizer if it has a chat template; otherwise, fall back to a default tokenizer (e.g., gpt2)
+        tokenizer = (
+            metadata.tokenizer
+            if getattr(metadata.tokenizer, "chat_template", None)
+            else AutoTokenizer.from_pretrained("gpt2")
+        )
+        prompt = tokenizer.apply_chat_template(
+            conversation=conversation,
+            tokenize=False,
+            add_generation_prompt=True,
         )
 
         print(prompt)
