@@ -123,7 +123,7 @@ class TritonLLMEngine(LLMEngine):
         model_names = [name for name, _ in self.server.models().keys()]
         if model_name not in model_names:
             return False
-        model = self.server.load_model(model_name)
+        model = self.server.load(model_name)
         if model.ready():
             self.model_metadata = self._get_model_metadata()
             return True
