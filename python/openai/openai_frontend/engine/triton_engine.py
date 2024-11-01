@@ -193,7 +193,9 @@ class TritonLLMEngine(LLMEngine):
                 add_generation_prompt=add_generation_prompt,
             )
             if metadata.tokenizer.chat_template
-            else construct_prompt(conversation)
+            else construct_prompt(
+                conversation, add_generation_prompt=add_generation_prompt
+            )
         )
 
         print(prompt)
