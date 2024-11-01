@@ -71,11 +71,27 @@ def load_model(request: Request, model_name: str) -> Response:
     if not request.app.engine:
         raise HTTPException(status_code=500, detail="No attached inference engine")
 
-    # TODO: Return model directly from engine instead of searching models
     loaded = request.app.engine.load_model(model_name)
     if loaded:
         return Response(status_code=200)
 
     raise HTTPException(
         status_code=404, detail=f"Model not loaded successfully: {model_name}"
+    )
+
+
+@router.get("/server/models/unload/{model_name}", tags=["Models"])
+def unload_model(request: Request, model_name: str) -> Response:
+    """
+    Unloads a model.
+    """
+    if not request.app.engine:
+        raise HTTPException(status_code=500, detail="No attached inference engine")
+
+    unloaded = request.app.engine.unload_model(model_name)
+    if unloaded:
+        return Response(status_code=200)
+
+    raise HTTPException(
+        status_code=404, detail=f"Model not unloaded successfully: {model_name}"
     )

@@ -129,6 +129,19 @@ class TritonLLMEngine(LLMEngine):
             return True
         return False
 
+    def unload_model(self, model_name: str) -> bool:
+        model_names = [name for name, _ in self.server.models().keys()]
+        if model_name not in model_names:
+            return False
+
+        # @todo: add timeout
+        self.server.unload(model_name, wait_for_unloaded=True)
+
+        model = self.server.model(model_name)
+        if not model.ready():
+            return True
+        return False
+
     async def chat(
         self, request: CreateChatCompletionRequest
     ) -> CreateChatCompletionResponse | AsyncIterator[str]:
