@@ -229,6 +229,8 @@ class TritonLLMEngine(LLMEngine):
             metadata.request_converter(metadata.model, request.prompt, request)
         )
 
+        print(responses)
+
         # Prepare and send responses back to client in OpenAI format
         request_id = f"cmpl-{uuid.uuid1()}"
         created = int(time.time())
