@@ -158,6 +158,7 @@ def main():
     server: tritonserver.Server = tritonserver.Server(
         model_repository=args.model_repository,
         log_verbose=args.tritonserver_log_verbose_level,
+        model_control_mode=tritonserver.ModelControlMode.EXPLICIT,
         log_info=True,
         log_warn=True,
         log_error=True,
