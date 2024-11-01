@@ -87,6 +87,24 @@ class TritonModelMetadata:
     request_converter: Callable
 
 
+# Function to construct a prompt manually
+def construct_prompt(conversation, add_generation_prompt: bool):
+    prompt = ""
+    assistant_role = next(
+        (msg["role"] for msg in conversation if msg["role"] != "user"), "assistant"
+    )
+
+    for msg in conversation:
+        role = "User" if msg["role"] == "user" else assistant_role.capitalize()
+        content = msg["content"]
+        prompt += f"{role}: {content}\n"
+
+    if add_generation_prompt:
+        prompt += f"{assistant_role.capitalize()}: "
+
+    return prompt
+
+
 class TritonLLMEngine(LLMEngine):
     def __init__(self, server: tritonserver.Server, backend: Optional[str] = None):
         # Assume an already configured and started server
@@ -175,7 +193,7 @@ class TritonLLMEngine(LLMEngine):
                 add_generation_prompt=add_generation_prompt,
             )
             if metadata.tokenizer.chat_template
-            else conversation
+            else construct_prompt(conversation)
         )
 
         print(prompt)
