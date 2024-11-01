@@ -257,6 +257,9 @@ class TritonLLMEngine(LLMEngine):
         for name, _ in self.server.models().keys():
             model = self.server.model(name)
             print(model)
+            if not model.ready():
+                continue
+            print(model.config())
             backend = model.config()["backend"]
             # Explicitly handle ensembles to avoid any runtime validation errors
             if not backend and model.config()["platform"] == "ensemble":
