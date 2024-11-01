@@ -173,7 +173,7 @@ class TritonLLMEngine(LLMEngine):
         tokenizer = (
             metadata.tokenizer
             if getattr(metadata.tokenizer, "chat_template", None)
-            else AutoTokenizer.from_pretrained("gpt2")
+            else AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat-hf")
         )
         prompt = tokenizer.apply_chat_template(
             conversation=conversation,
