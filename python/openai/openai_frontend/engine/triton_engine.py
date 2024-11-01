@@ -255,8 +255,8 @@ class TritonLLMEngine(LLMEngine):
 
         # Read all triton models and store the necessary metadata for each
         for name, _ in self.server.models().keys():
-            print(model)
             model = self.server.model(name)
+            print(model)
             backend = model.config()["backend"]
             # Explicitly handle ensembles to avoid any runtime validation errors
             if not backend and model.config()["platform"] == "ensemble":
