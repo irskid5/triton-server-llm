@@ -68,6 +68,7 @@ tokenizers = {
     "gpt-neox-20b": "EleutherAI/gpt-neox-20b",
     "mpt-7b-chat": "mosaicml/mpt-7b-chat",
     "open_llama_13b": "openlm-research/open_llama_13b",
+    "mistral-7b-instruct-v0.3": "mistralai/Mistral-7B-Instruct-v0.3",
 }
 
 
