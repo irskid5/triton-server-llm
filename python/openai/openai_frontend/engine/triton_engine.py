@@ -251,11 +251,11 @@ class TritonLLMEngine(LLMEngine):
         return tokenizer
 
     def _get_model_metadata(self) -> Dict[str, TritonModelMetadata]:
-        # One tokenizer and creation time shared for all loaded models for now.
         model_metadata = {}
 
         # Read all triton models and store the necessary metadata for each
         for name, _ in self.server.models().keys():
+            print(model)
             model = self.server.model(name)
             backend = model.config()["backend"]
             # Explicitly handle ensembles to avoid any runtime validation errors
