@@ -168,10 +168,14 @@ class TritonLLMEngine(LLMEngine):
         ]
         add_generation_prompt = True
 
-        prompt = metadata.tokenizer.apply_chat_template(
-            conversation=conversation,
-            tokenize=False,
-            add_generation_prompt=add_generation_prompt,
+        prompt = (
+            metadata.tokenizer.apply_chat_template(
+                conversation=conversation,
+                tokenize=False,
+                add_generation_prompt=add_generation_prompt,
+            )
+            if metadata.tokenizer.chat_template
+            else conversation
         )
 
         print(prompt)
