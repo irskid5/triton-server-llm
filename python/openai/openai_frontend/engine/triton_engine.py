@@ -119,6 +119,16 @@ class TritonLLMEngine(LLMEngine):
 
         return models
 
+    def load_model(self, model_name: str) -> bool:
+        model_names = [name for name, _ in self.server.models().keys()]
+        if model_name not in model_names:
+            return False
+        model = self.server.load_model(model_name)
+        if model.ready():
+            self.model_metadata = self._get_model_metadata()
+            return True
+        return False
+
     async def chat(
         self, request: CreateChatCompletionRequest
     ) -> CreateChatCompletionResponse | AsyncIterator[str]:

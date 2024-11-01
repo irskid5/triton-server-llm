@@ -26,7 +26,7 @@
 
 from typing import List
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Response
 from schemas.openai import ListModelsResponse, Model, ObjectType
 
 router = APIRouter()
@@ -61,3 +61,21 @@ def retrieve_model(request: Request, model_name: str) -> Model:
             return model
 
     raise HTTPException(status_code=404, detail=f"Unknown model: {model_name}")
+
+
+@router.get("/server/models/load/{model_name}", tags=["Models"])
+def load_model(request: Request, model_name: str) -> Response:
+    """
+    Loads a model.
+    """
+    if not request.app.engine:
+        raise HTTPException(status_code=500, detail="No attached inference engine")
+
+    # TODO: Return model directly from engine instead of searching models
+    loaded = request.app.engine.load_model(model_name)
+    if loaded:
+        return Response(status_code=200)
+
+    raise HTTPException(
+        status_code=404, detail=f"Model not loaded successfully: {model_name}"
+    )
