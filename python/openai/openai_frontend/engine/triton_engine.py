@@ -120,26 +120,37 @@ class TritonLLMEngine(LLMEngine):
         return models
 
     def load_model(self, model_name: str) -> bool:
+        # Check if model name exists in model repository
         model_names = [name for name, _ in self.server.models().keys()]
         if model_name not in model_names:
             return False
+
+        # Load the model
         model = self.server.load(model_name)
+
+        # Check if model is loaded, update local model metadata list
         if model.ready():
             self.model_metadata = self._get_model_metadata()
             return True
+
         return False
 
     def unload_model(self, model_name: str) -> bool:
+        # Check if model name exists in model repository
         model_names = [name for name, _ in self.server.models().keys()]
         if model_name not in model_names:
             return False
 
+        # Unload model
         # @todo: add timeout
         self.server.unload(model_name, wait_for_unloaded=True)
 
+        # Check if model is unloaded, update local model metadata list
         model = self.server.model(model_name)
         if not model.ready():
+            self.model_metadata = self._get_model_metadata()
             return True
+
         return False
 
     async def chat(
