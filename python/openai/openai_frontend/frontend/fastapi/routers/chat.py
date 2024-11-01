@@ -45,6 +45,7 @@ async def create_chat_completion(
         raise HTTPException(status_code=500, detail="No attached inference engine")
 
     try:
+        print(raw_request)
         response = await raw_request.app.engine.chat(request)
         if request.stream:
             return StreamingResponse(response, media_type="text/event-stream")

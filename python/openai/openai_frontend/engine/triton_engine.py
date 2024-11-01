@@ -156,8 +156,11 @@ class TritonLLMEngine(LLMEngine):
     async def chat(
         self, request: CreateChatCompletionRequest
     ) -> CreateChatCompletionResponse | AsyncIterator[str]:
+        print("In chat completion")
         metadata = self.model_metadata.get(request.model)
         self._validate_chat_request(request, metadata)
+
+        print(metadata)
 
         conversation = [
             {"role": str(message.role), "content": str(message.content)}
@@ -170,6 +173,8 @@ class TritonLLMEngine(LLMEngine):
             tokenize=False,
             add_generation_prompt=add_generation_prompt,
         )
+
+        print(prompt)
 
         # Convert to Triton request format and perform inference
         responses = metadata.model.async_infer(
