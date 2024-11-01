@@ -63,10 +63,10 @@ from transformers import AutoTokenizer
 tokenizers = {
     "llama-3.1-8b-instruct": "meta-llama/Llama-3.1-8B-Instruct",
     "llama-2-13b-hf": "meta-llama/Llama-2-13b-hf",
-    "mpt-30b-instruct": "mosaicml/mpt-30b-instruct",
+    "mpt-30b-chat": "mosaicml/mpt-30b-chat",
     "flan-t5-xl": "google/flan-t5-xl",
     "gpt-neox-20b": "EleutherAI/gpt-neox-20b",
-    "mpt-7b-instruct": "mosaicml/mpt-7b-instruct",
+    "mpt-7b-chat": "mosaicml/mpt-7b-chat",
     "open_llama_13b": "openlm-research/open_llama_13b",
 }
 
